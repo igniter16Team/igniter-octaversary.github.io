@@ -11,51 +11,55 @@
 <body>
 
 <div id="slide1" class="slide active">
-  <p>Type a keyword:</p>
-  <input type="text" id="userInput" placeholder="happy or birthday">
-  <br><br>
-  <button onclick="goToGeneral()">Next</button>
+  <input id="textInput" placeholder="Type your unique ID">
 </div>
 
-<div id="slide2" class="slide">
+<div id="slideGeneral" class="slide">
   <p>General Slide</p>
-  <button onclick="goToUnique()">Continue</button>
+  <button onclick="goToUniqueSlide()">Continue</button>
 </div>
 
-<div id="slide3" class="slide">
+<div id="slideUnique" class="slide">
   <h2 id="title"></h2>
   <p id="message"></p>
 </div>
 
 <script>
-  let typedKey = "";
-  let jsonData = {};
+let jsonData = {};
+let selectedKey = "";
 
-  fetch("data.json")
-    .then(res => res.json())
-    .then(data => jsonData = data);
+fetch("data.json")
+  .then(res => res.json())
+  .then(data => jsonData = data);
 
-  function goToGeneral() {
-    typedKey = document.getElementById("userInput").value.toLowerCase();
-    if (!jsonData[typedKey]) {
-      alert("Keyword not found in JSON!");
-      return;
-    }
-    showSlide("slide2");
+const input = document.getElementById("textInput");
+
+input.addEventListener("change", function () {
+  const value = input.value.trim();
+
+  if (jsonData[value]) {
+    selectedKey = value;
+    showSlide("slideGeneral"); // Slide 2
+  } else {
+    alert("ID not found!");
   }
+});
 
-  function goToUnique() {
-    const content = jsonData[typedKey];
-    document.getElementById("title").innerText = content.title;
-    document.getElementById("message").innerText = content.message;
-    showSlide("slide3");
-  }
+function goToUniqueSlide() {
+  const data = jsonData[selectedKey];
 
-  function showSlide(id) {
-    document.querySelectorAll(".slide").forEach(s => s.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
-  }
+  document.getElementById("title").innerText = data.title;
+  document.getElementById("message").innerText = data.message;
+
+  showSlide("slideUnique"); // Slide 3 (template)
+}
+
+function showSlide(id) {
+  document.querySelectorAll(".slide").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
 </script>
+
 
 </body>
 </html>
