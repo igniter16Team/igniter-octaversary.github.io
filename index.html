@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Slide Flow</title>
+  <style>
+    .slide { display: none; font-size: 30px; text-align: center; margin-top: 100px; }
+    .active { display: block; }
+    input { font-size: 20px; padding: 10px; }
+  </style>
+</head>
+<body>
+
+<div id="slide1" class="slide active">
+  <p>Type a word:</p>
+  <input type="text" id="textInput" placeholder="Type happy or birthday">
+</div>
+
+<div id="slideGeneral" class="slide">
+  <p>Processing your input...</p>
+</div>
+
+<div id="slideHappy" class="slide">
+  🎉 This is HAPPY slide 🎉
+</div>
+
+<div id="slideBirthday" class="slide">
+  🎂 This is BIRTHDAY slide 🎂
+</div>
+
+<script>
+  const input = document.getElementById("textInput");
+
+  input.addEventListener("change", function () {
+    const value = input.value.toLowerCase();
+
+    if (value === "happy" || value === "birthday") {
+      showSlide("slideGeneral");
+
+      setTimeout(() => {
+        if (value === "happy") showSlide("slideHappy");
+        if (value === "birthday") showSlide("slideBirthday");
+      }, 1500); // wait 1.5 seconds on general slide
+    }
+  });
+
+  function showSlide(id) {
+    document.querySelectorAll(".slide").forEach(s => s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+  }
+</script>
+
+</body>
+</html>
