@@ -1,47 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Slide Flow</title>
+  <title>Dynamic Slide from JSON</title>
   <style>
-    .slide { display: none; font-size: 30px; text-align: center; margin-top: 100px; }
+    .slide { display: none; text-align: center; margin-top: 100px; font-size: 24px; }
     .active { display: block; }
-    input { font-size: 20px; padding: 10px; }
+    input, button { font-size: 18px; padding: 10px; }
   </style>
 </head>
 <body>
 
 <div id="slide1" class="slide active">
-  <p>Type a word:</p>
-  <input type="text" id="textInput" placeholder="Type happy or birthday">
+  <p>Type a keyword:</p>
+  <input type="text" id="userInput" placeholder="happy or birthday">
+  <br><br>
+  <button onclick="goToGeneral()">Next</button>
 </div>
 
-<div id="slideGeneral" class="slide">
-  <p>Processing your input...</p>
+<div id="slide2" class="slide">
+  <p>General Slide</p>
+  <button onclick="goToUnique()">Continue</button>
 </div>
 
-<div id="slideHappy" class="slide">
-  🎉 This is HAPPY slide 🎉
-</div>
-
-<div id="slideBirthday" class="slide">
-  🎂 This is BIRTHDAY slide 🎂
+<div id="slide3" class="slide">
+  <h2 id="title"></h2>
+  <p id="message"></p>
 </div>
 
 <script>
-  const input = document.getElementById("textInput");
+  let typedKey = "";
+  let jsonData = {};
 
-  input.addEventListener("change", function () {
-    const value = input.value.toLowerCase();
+  fetch("data.json")
+    .then(res => res.json())
+    .then(data => jsonData = data);
 
-    if (value === "happy" || value === "birthday") {
-      showSlide("slideGeneral");
-
-      setTimeout(() => {
-        if (value === "happy") showSlide("slideHappy");
-        if (value === "birthday") showSlide("slideBirthday");
-      }, 1500); // wait 1.5 seconds on general slide
+  function goToGeneral() {
+    typedKey = document.getElementById("userInput").value.toLowerCase();
+    if (!jsonData[typedKey]) {
+      alert("Keyword not found in JSON!");
+      return;
     }
-  });
+    showSlide("slide2");
+  }
+
+  function goToUnique() {
+    const content = jsonData[typedKey];
+    document.getElementById("title").innerText = content.title;
+    document.getElementById("message").innerText = content.message;
+    showSlide("slide3");
+  }
 
   function showSlide(id) {
     document.querySelectorAll(".slide").forEach(s => s.classList.remove("active"));
