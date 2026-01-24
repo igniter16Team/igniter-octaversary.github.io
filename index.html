@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dynamic Slide from JSON</title>
+  <title>Igniter Octaversary</title>
   <style>
     .slide { display: none; text-align: center; margin-top: 100px; font-size: 24px; }
     .active { display: block; }
@@ -11,11 +11,13 @@
 <body>
 
 <div id="slide1" class="slide active">
+  <h1>Enter your unique code</h1>
   <input id="textInput" placeholder="Type your unique ID">
 </div>
 
 <div id="slideGeneral" class="slide">
-  <p>General Slide</p>
+  <p>Happy Anniversary 8th Igniter</p>
+  <p>with Almost 1 decade being together</p>
   <button onclick="goToUniqueSlide()">Continue</button>
 </div>
 
@@ -28,7 +30,7 @@
 let jsonData = {};
 let selectedKey = "";
 
-fetch("data.json")
+fetch("datatest.json")
   .then(res => res.json())
   .then(data => jsonData = data);
 
